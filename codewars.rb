@@ -195,10 +195,10 @@
 # p strong_enough([[5,8,7],[3,3,1],[4,1,2]], 2)
 # p strong_enough([[5,8,7],[3,3,1],[4,1,2]], 3)
 
-####Playing with reduce. This would have worked for the previous exercise. 
-test = [[2,3,1],[3,1,1,],[1,1,2]]
-test.map! do |x|
-  x.reduce(:+)
-end
-p test
-p test.reduce(:*)
+####Playing with reduce. This would have worked for the previous exercise.
+# test = [[2,3,1],[3,1,1,],[1,1,2]]
+# test.map! do |x|
+#   x.reduce(:+)
+# end
+# p test
+# p test.reduce(:*)
