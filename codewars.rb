@@ -168,8 +168,37 @@
 # Given two strings representing positive integers, such as "12" and "35", return a string containing their product.
 #####
 
-def multiplyMyNumbers(a, b)
-  String(Integer(a) * Integer(b))
-end
+# def multiplyMyNumbers(a, b)
+#   String(Integer(a) * Integer(b))
+# end
+#
+# p multiplyMyNumbers('5', '1')
 
-p multiplyMyNumbers('5', '1')
+
+###
+#Calculate if building is safe.
+###
+# def strong_enough( earthquake, age )
+#   building = 1000 * (1 - 0.01)**age
+#   quake = 1
+#   earthquake.each do |x|
+#     sums = 0
+#     x.each do |y|
+#       sums += y
+#     end
+#     quake *= sums
+#   end
+#   building > quake ? "Safe!" : "Needs Reinforcement!"
+# end
+#
+# p strong_enough([[2,3,1],[3,1,1,],[1,1,2]], 2)
+# p strong_enough([[5,8,7],[3,3,1],[4,1,2]], 2)
+# p strong_enough([[5,8,7],[3,3,1],[4,1,2]], 3)
+
+####Playing with reduce. This would have worked for the previous exercise. 
+test = [[2,3,1],[3,1,1,],[1,1,2]]
+test.map! do |x|
+  x.reduce(:+)
+end
+p test
+p test.reduce(:*)
