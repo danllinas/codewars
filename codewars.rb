@@ -202,3 +202,13 @@
 # end
 # p test
 # p test.reduce(:*)
+
+#####Pattern: output odd digits that digit number of times.
+def pattern n
+  return '' if n <= 0
+  n.times do |num|
+    puts "#{num}" * num if num.odd?
+  end
+end
+pattern 21
+##########################
