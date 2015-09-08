@@ -204,11 +204,32 @@
 # p test.reduce(:*)
 
 #####Pattern: output odd digits that digit number of times.
-def pattern n
-  return '' if n <= 0
-  n.times do |num|
-    puts "#{num}" * num if num.odd?
-  end
-end
-pattern 21
+# def pattern n
+#   return '' if n <= 0
+#   array = []
+#   (1..n).to_a.each do |num|
+#     array << "#{num}" * num if num.odd?
+#   end
+#   array.join("\n")
+# end
+# puts pattern 13
 ##########################
+
+###########Make a person class that returns a greeting.
+class Person
+  attr_accessor :first_name, :last_name
+
+  def initialize(first, last)
+    @first_name = first
+    @last_name = last
+  end
+
+  def greet
+    return "Hello, #{@first_name} #{@last_name}!"
+  end
+
+end
+
+person = Person.new("Bob", "Smith")
+p person.greet
+########################
