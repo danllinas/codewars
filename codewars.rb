@@ -216,20 +216,31 @@
 ##########################
 
 ###########Make a person class that returns a greeting.
-class Person
-  attr_accessor :first_name, :last_name
+# class Person
+#   attr_accessor :first_name, :last_name
+#
+#   def initialize(first, last)
+#     @first_name = first
+#     @last_name = last
+#   end
+#
+#   def greet
+#     return "Hello, #{@first_name} #{@last_name}!"
+#   end
+#
+# end
+#
+# person = Person.new("Bob", "Smith")
+# p person.greet
+########################
 
-  def initialize(first, last)
-    @first_name = first
-    @last_name = last
-  end
-
-  def greet
-    return "Hello, #{@first_name} #{@last_name}!"
-  end
-
+###############
+###Method that takes a list and block and returns items as long as block is true.
+###############
+list = [0,1,2,3,5,8,13]
+def drop_while list, &block
+  list.drop_while(&block)
 end
 
-person = Person.new("Bob", "Smith")
-p person.greet
-########################
+p drop_while(list){ |item| item < 3 }
+###############
