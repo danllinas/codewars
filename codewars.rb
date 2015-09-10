@@ -245,4 +245,13 @@
 # p drop_while(list){ |item| item < 3 }
 ###############
 
-p "Danny".respond_to? 'map'
+# p "Danny".respond_to? 'map'
+
+first = ['a', 'b', 'c']
+second = ['d', 'e', 'f']
+# p first.zip(second).flatten
+def zip first, second
+  first.zip(second).flatten
+end
+
+p zip(first, second)
