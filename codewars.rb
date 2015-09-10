@@ -237,10 +237,12 @@
 ###############
 ###Method that takes a list and block and returns items as long as block is true.
 ###############
-list = [0,1,2,3,5,8,13]
-def drop_while list, &block
-  list.drop_while(&block)
-end
-
-p drop_while(list){ |item| item < 3 }
+# list = [0,1,2,3,5,8,13]
+# def drop_while list, &block
+#   list.drop_while(&block)
+# end
+#
+# p drop_while(list){ |item| item < 3 }
 ###############
+
+p "Danny".respond_to? 'map'
