@@ -247,11 +247,16 @@
 
 # p "Danny".respond_to? 'map'
 
-first = ['a', 'b', 'c']
-second = ['d', 'e', 'f']
-# p first.zip(second).flatten
-def zip first, second
-  first.zip(second).flatten
-end
-
-p zip(first, second)
+##################
+####Learning the zip function for enumerable and array
+##################
+# first = ['a', 'b', 'c']
+# second = ['d', 'e', 'f']
+# # p first.zip(second).flatten
+# def zip first, second
+#   first.zip(second).flatten
+# end
+#
+# p zip(first, second)
+# ##################
+# ##################
