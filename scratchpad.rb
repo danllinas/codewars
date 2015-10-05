@@ -1,7 +1,15 @@
-def greeting(name)
-  "Hello #{name}."
+class MyClass
+
+ def to_s
+   "carolina"
+ end
+
+ def inspect
+  "perro"
+ end
 end
 
-person1 = greeting("Danny")
 
-puts person1
+instancia = MyClass.new
+puts instancia
+p instancia
