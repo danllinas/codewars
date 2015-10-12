@@ -1,18 +1,13 @@
-require 'httparty'
+require 'HTTParty'
+require 'JSON'
 
-method, site = ARGV
 
-case method
-when"GET"
-  response = HTTParty.get(site)
-when "POST"
-  response = HTTParty.post(site)
-end
 
-puts response.response.code
+html = ARGV.last
 
-response.headers.each do |key, value|
-  puts "#{key}: #{value}"
-end
+headers = {'Content-type' => 'application/json'}
+puts HTTParty.post(html, headers: headers)
 
-# puts response.body
+response = HTTParty.get(html)
+
+puts response
