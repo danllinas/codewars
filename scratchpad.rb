@@ -1,79 +1,79 @@
-# Created by Joseph Ciancio 9/27/2015
-# A simple game that has the user select an X-Men and fight against Magneto
-require "./x_men_module.rb"
-include XMenMethods
 
-begin
-# Welcome Message
-  puts "Welcome to Professor Xavier's School for Gifted Youngsters!\n\nWe need your help to save the world!"
-  letUserRead
-  puts "\nYou'll be going up against a villain! \n\nEach round choose one of your character's powers to pulverize the villain."
-  letUserRead
+def ready
+  puts "are you ready 'yes or no?'"
+  reply = gets.chomp
+end
 
-  character = choosePlayer
-  letUserRead
+def questions
+       puts "First question: What's the capital city of Colombia/n"
+       puts "1.Bogotá"
+       puts "2.Buenos aires"
+       puts "3.Peru"
+       puts "Write your answer"
+       firstanswer = gets.chomp.downcase
+          if ["bogotá","bogota","1","1.","1.bogota","1.bogotá"].include? firstanswer
+          # if firstanswer.capitalize == "Bogota"
+               puts "Well done. You earned $100. Let's move forward"
+               puts "Second question: What's the capital city of Ecuador?"
+               puts "1.quito"
+               puts "2.medellin"
+               puts "3.montevideo"
+               puts "write your answer"
 
-  enemy = chooseEnemy
-  letUserRead
+               secondanswer = gets.chomp
+                if secondanswer.capitalize == "Quito"
+                      puts "Well done. You have earned 500.000 so far. Let's move forward"
+                      puts "Third question: what's the name of the pope?"
+                      puts "1.Francisco"
+                      puts "2.Paulo"
+                      puts "3.Pablo"
+                      puts "write your answer"
+                      thirdanswer = gets.chomp
+                        if thirdanswer.capitalize == "Francisco"
+                        puts "                                                   /$$
+                                                  |__/
+ /$$   /$$  /$$$$$$  /$$   /$$       /$$  /$$  /$$ /$$ /$$$$$$$
+| $$  | $$ /$$__  $$| $$  | $$      | $$ | $$ | $$| $$| $$__  $$
+| $$  | $$| $$  \ $$| $$  | $$      | $$ | $$ | $$| $$| $$  \ $$
+| $$  | $$| $$  | $$| $$  | $$      | $$ | $$ | $$| $$| $$  | $$
+|  $$$$$$$|  $$$$$$/|  $$$$$$/      |  $$$$$/$$$$/| $$| $$  | $$
+ \____  $$ \______/  \______/        \_____/\___/ |__/|__/  |__/
+ /$$  | $$
+|  $$$$$$/
+ \______/                                                       "
+                        sleep(1)
+                        Launchy.open("https://www.youtube.com/watch?v=l91ISfcuzDw")
+                        else
+                          puts "wrong. You lose"
+                          puts "let's play again"
+                          ready
+                          questions
+                        end
+                else
+                  puts "wrong. you lose"
+                  puts "let's play again"
+                  ready
+                  questions
+                end
+          else
+              puts "wrong. you lose"
+              puts "let's play again"
+              ready
+              questions
+          end
+        end
 
-  player_health = 100
-  enemy_health = 100
+puts "Hi! we are going to play 'Who wants to be a Millonaire?'"
+puts "We will send some of questions. For each question you answer correctly, you will earn a certain amount of money. You can earn up to a million dollars"
 
-# This loop creates the battle
-  begin
-    puts "\nYour health is now at: #{player_health} and #{enemy.capitalize}'s is at: #{enemy_health}."
-    puts "\nYour turn! Choose a power. Options: "
-    remindPowers(character)
+user_answer = ready
+options = ["yes","no"]
 
-    attack_choice = gets.chomp.downcase
-    letUserRead
-
-
-    case attack_choice
-    when "auto heal"
-      player_health = autoHeal(character)
-    when "blade blitz", "slash attack"
-      if character == "wolverine"
-        weak_damage_this_round = randomWeakAttack(enemy_health, player_health)
-        enemy_health = weak_damage_this_round[0]
-        player_health = weak_damage_this_round[1]
-        # puts "\nYou just did #{player_damage_this_round} damage!"
-      else
-        puts "\nSorry #{character.capitalize} can't use #{attack_choice}"
-      end
-    when "lazer beam", "heat ray"
-      if character == "cyclops"
-        weak_damage_this_round = randomWeakAttack(enemy_health, player_health)
-        enemy_health = weak_damage_this_round[0]
-        player_health = weak_damage_this_round[1]
-      else
-        puts "\nSorry #{character.capitalize} can't use #{attack_choice}"
-      end
-    when "freeze blast", "ice rocket"
-      if character == "iceman"
-        weak_damage_this_round = randomWeakAttack(enemy_health, player_health)
-        enemy_health = weak_damage_this_round[0]
-        player_health = weak_damage_this_round[1]
-      else
-        puts "\nSorry #{character.capitalize} can't use #{attack_choice}"
-      end
-    when "tornado", "earthquake"
-      if character == "storm"
-        weak_damage_this_round = randomWeakAttack(enemy_health, player_health)
-        enemy_health = weak_damage_this_round[0]
-        player_health = weak_damage_this_round[1]
-      else
-        puts "\nSorry #{character.capitalize} can't use #{attack_choice}"
-      end
-    when "ultra lazer blast", "snow bomb", "lightning strike"
-      strong_damage_this_round = randomStrongAttack(enemy_health, player_health)
-      enemy_health = strong_damage_this_round[0]
-      player_health = strong_damage_this_round[1]
-    else
-      puts "\nSorry, #{attack_choice} is not one of #{character.capitalize}'s powers."
+if user_answer.include? options[0]
+    questions
+  else
+    until user_answer.include? options[0] do
+      user_answer = ready
     end
-    letUserRead
-  end until (enemy_health <= 0) || (player_health <= 0)
-
-  finalMessage(enemy_health, player_health)
-  restart = playAgain
+    questions
+end
