@@ -1,13 +1,16 @@
-require 'HTTParty'
-require 'JSON'
+require 'httparty'
+
+AG1 = ARGV[0]
+AG2 = ARGV[1]
+
+
+case AG1
+when "GET"
+  response = HTTParty.get(AG2)
+end
 
 
 
-html = ARGV.last
 
-headers = {'Content-type' => 'application/json'}
-puts HTTParty.post(html, headers: headers)
-
-response = HTTParty.get(html)
-
-puts response
+p response.headers
+puts response.body
