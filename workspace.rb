@@ -1,593 +1,576 @@
-selling = true
-money = 0.0
-income = 0.0
-day = 1
-workday = day * 8
-harvest_rate = 50 #your default harvest rate per hour
-total_harvest = 0
-avg_price = 5.50 #average price on average day
-avg_wholesale_price = 4.50 #average wholesale price to buy on average day
-demand_price = 0.0
-weather_arr = [{"Sunny" => 2.0}, {"Clear" => 1.5}, {"Cloudy" => 1.0}, {"Overcast" => 0.8}, {"Showers" => 0.7}, {"Heavy Rain" => 0.6}]
-tool = "shimmying up trees."
-employees = 0
-employee_daily_cost = 200 #daily cost per employee per harvest day
-employee_harvest_rate = 10 #each employees harvest rate per hour
+# Method for start of the game **********************
+def start
+# Setup for menu
+puts"					            "
+puts"					            "
+puts"             --- Welcome to The Jungle --- "
+puts"                    ----------------"
+puts"                   |1) Start Game   |"
+puts"                   |2) Intro        |"
+puts"                   |3) About        |"
+puts"                   |4) Exit         |"
+puts"                    ---------------- "
 
+# get user input for menu **********************
+choice=0
+  until ((choice>=1)&&(choice<=4)) do
+   puts"                   Chose your option:"
+   print"                   > "
+   choice = gets.chomp.to_i
+ end
 
-puts %Q{
+if (choice==1)
+  intro
+  select_weapon
+end
 
-   mMMMMM~.
- .MMMMMMMMM~.
- ^   .MMMMMMMMMMMMM~.
-      .MMMMMMMMMMMMMMM~.       WELLCOME TO ...
-  .MMMMMMMMMMMMMMMMMMMMm~.
- .MMMMMMMM.MMMMMMMMm~.   ^
- MMMM.     MMM/MMMMMm~.
-MM,        MMM/  NMMMm~.       .8888D88D                 .88$$888D
-^          MMMM/  .NMMm^.     88.      88               88D      .8D
-           MMMM/    MM~^     88         8              D8D         8
-           MMMM/       ^    888                        88
-           MMMM/            888              88.888   888               88.88
-          /MMM/             888             88    88  888.            88.   88
-          MMMM/             888            888    888  888            88     88
-         MMMMM/             .888.        8 888    88I  8888        .= 88.   .88.
-        8MMMM/                8888    .88   88    88    O888      8   O88   88.
-      .MMMM/                   8888888        8888        .888888       88888
-   .$$.  .$$ .$$. .$$   .$$   .$$  .$$$$$  .$$  .$$   .$$.   .$$ .$$$$$$ .$$$$$
-   .$$$..$S$ .$$  .$$   .$$   .$$ .$$   $$ .$$$ .$$  .$$$$   .$$ .$$ .$$ .$$...
-   .$.$$$.$$ .$$  .$$   .$$   .$$ .$$   $$ .$$$ $$$  .$$ $$  .$$ .$$:$$  .$$$$$
-   .$ .$ .$$ .$$  .$$   .$$.. .$$  $$.  $$ .$$.$$$$ .$$$$$$$ .$$ .$$ \\$\\ .$$...
-   .$    .$$ .$$  .$$$$$.$$$$$.$$   .$$$/  .$$ .$$$.$$$  .$$$.$$ .$$. \\$\\.$$$$$
-   	   Developed by: Matt King
-}
+if (choice==2)
+  intro
+  select_weapon
+end
 
-puts "What is your name?"
-puts " "
-name = gets.chomp
-puts " "
-puts "We know times are rough, #{name.capitalize}, being homeless isn't easy."
-puts "Luckily you live in Miami Beach. You've found selling coconuts to beachgoers to be easy money."
-puts " "
-puts "You'll need to start by harvesting some coconuts. Each harvest will take a full workday."
-puts "Once you have a reasonable inventory, you should hit the beach"
-puts "on days with GOOD weather to get the highest price for your prized coconuts."
-puts
-puts "When you begin making money, you've got a few different options to reinvest.."
-puts "You can upgrade your tools to increase your personal harvest rate,"
-puts "you can employ other homeless people to increase your overall harvest rate,"
-puts "or you can purchase coconuts at wholesale prices on POOR weather days from the other sellers."
-puts "Each of these options will also take a full day for deal makings and paperwork.."
-puts " "
-while selling
-	if money < 1_000_000
-		curr_temp = rand(55..105)
-		curr_weather = 0
-		weather_mult = 0
-		weather_option = weather_arr.sample
-		weather_option.each do |key,value|
-			curr_weather = key.to_s
-			weather_mult = value
-		end
-		temp_mult = 0
-		puts "-- Today is Day #{day}"
-		puts "-- Today's Forecast -- Temperature: #{curr_temp} Weather: #{curr_weather}"
-		puts "-- You have $#{money.round(2)} and #{total_harvest.to_i} coconuts."
-		puts "-- Personal harvest rate: #{harvest_rate} coconuts/hour"
-		if employees > 0
-			puts "-- Employee harvest rate: #{employees * employee_harvest_rate} coconuts/hour"
-			puts "-- Number of employees: #{employees}"
-		end
-		puts " "
-		puts "What would you like to do today, #{name.capitalize}: HARVEST, SELL, or BUY?"
-		puts " "
-		sell_option = gets.chomp.downcase
-		case sell_option
-		when "harvest"
-			day += 1
-			day_harvest = harvest_rate * workday
-			puts " "
-		    puts "-- You spend the entire day #{tool}" #CHANGE to upgrade tool
-		    puts "-- By sundown, you've collected #{day_harvest} coconuts! Nice!"
-		    puts " "
-		    total_harvest += day_harvest
-		    employee_total_cost = employees * employee_daily_cost
-		    if (employees > 0) && (employee_total_cost < money)
-		    	employee_harvest = employees * employee_harvest_rate * workday
-		    	total_harvest += employee_harvest
-		    	money -= employee_total_cost #subtracting employee costs on harvest day
-		    	# puts "test string"
-		    	puts "Your #{employees} employees have harvested an additional #{employee_harvest} coconuts!"
-		    	puts "#{name.capitalize} & Co.'s total harvest for the day: #{(day_harvest + employee_harvest)} coconuts."
-		    	puts " "
-		    elsif (employees > 0) && (employee_total_cost > money)
-		    	puts "-- You don't have enough money to pay all of your employees today!"
-		    	puts " "
-		    else
-		    end
-		when "sell"
-			if total_harvest > 0
-				puts " "
-				puts "-- You hit the beach and set up shop!"
-				puts "What would you like to set your price at?"
-				puts " "
-				set_price = gets.chomp.to_f #users set price
-				puts " "
-			    puts "The beachgoers begin to trickle over to you.."
-			    day += 1
-			    if curr_temp <= 65
-			    	temp_mult = 0.75
-	    			demand_mult = temp_mult * weather_mult
-	    			demand_price = demand_mult * avg_price
-    				sell_ratio = (demand_price / set_price).round(2) #if the demand price is higher than set price, sell all. if lower, sell less
-				    if 	sell_ratio > 1
-				    	sold = total_harvest
-				    	income = (sold * set_price).round(2)
-				    	money += income
-				    	total_harvest = 0
-				    	puts " "
-				    	puts "You sold #{sold} coconuts to 100% of beachgoers"
-				    	if sell_ratio > 1.5
-				    		puts "Your coconuts sold out in the first hour! You need to raise your price much higher."
-				    	elsif sell_ratio > 1.1 && sell_ratio <= 1.5
-					    	puts "Your coconuts sold out by the afternoon, try raising your price a bit higher."
-					    elsif sell_ratio > 0.9 && sell_ratio <= 1.1
-					    	puts "Considering the weather, you priced your coconuts extremely well!"
-					    elsif sell_ratio > 0.6 && sell_ratio <= 0.9
-					    	puts "Your coconuts didn't sell out, try lowering your price a bit to sell more."
-					    elsif sell_ratio > 0.4 && sell_ratio <= 0.6
-					    	puts "You only sold about half of your coconuts, try lowering your price more."
-					    else
-					    	puts "You hardly sold any coconuts, you should probably lower your price much more."
-					    end
-					    puts "You banked $#{income} today for a total of $#{money}"
-		    		    puts " "
+if (choice==3)
+  about
+  start
+end
 
-				    else sell_ratio < 1
-				    	sold = (total_harvest * sell_ratio).to_i
-				    	income = (sold * set_price).round(2)
-	 				    money += income
-	 				    total_harvest -= sold
-	 				    puts " "
-	 				    puts "You sold #{sold} coconuts to #{(sell_ratio*100).round(2)}% of beachgoers"
-				    	if sell_ratio > 1.5
-				    		puts "Your coconuts sold out in the first hour! You need to raise your price much higher."
-				    	elsif sell_ratio > 1.1 && sell_ratio <= 1.5
-					    	puts "Your coconuts sold out by the afternoon, try raising your price a bit higher."
-					    elsif sell_ratio > 0.9 && sell_ratio <= 1.1
-					    	puts "Considering the weather, you priced your coconuts extremely well!"
-					    elsif sell_ratio > 0.6 && sell_ratio <= 0.9
-					    	puts "Your coconuts didn't sell out, try lowering your price a bit to sell more."
-					    elsif sell_ratio > 0.4 && sell_ratio <= 0.6
-					    	puts "You only sold about half of your coconuts, try lowering your price more."
-					    else
-					    	puts "You hardly sold any coconuts, you should probably lower your price much more."
-					    end
-				    	puts "You banked $#{income} today for a total of $#{money}"
-					    puts " "
-	 				end
+if (choice==4)
+  close
+end
+end
 
-			    elsif curr_temp > 65 && curr_temp <= 75
-			    	temp_mult = 1.0
-			    	demand_mult = temp_mult * weather_mult
-	    			demand_price = demand_mult * avg_price
-    				sell_ratio = (demand_price / set_price).round(2) #if the demand price is higher than set price, sell all. if lower, sell less
-				     if sell_ratio > 1
-				    	sold = total_harvest
-				    	income = (sold * set_price).round(2)
-				    	money += income
-				    	total_harvest = 0
-				    	puts " "
-				    	puts "You sold #{sold} coconuts to 100% of beachgoers"
-				    	if sell_ratio > 1.5
-				    		puts "Your coconuts sold out in the first hour! You need to raise your price much higher."
-				    	elsif sell_ratio > 1.1 && sell_ratio <= 1.5
-					    	puts "Your coconuts sold out by the afternoon, try raising your price a bit higher."
-					    elsif sell_ratio > 0.9 && sell_ratio <= 1.1
-					    	puts "Considering the weather, you priced your coconuts extremely well!"
-					    elsif sell_ratio > 0.6 && sell_ratio <= 0.9
-					    	puts "Your coconuts didn't sell out, try lowering your price a bit to sell more."
-					    elsif sell_ratio > 0.4 && sell_ratio <= 0.6
-					    	puts "You only sold about half of your coconuts, try lowering your price more."
-					    else
-					    	puts "You hardly sold any coconuts, you should probably lower your price much more."
-					    end
-					    puts "You banked $#{income} today for a total of $#{money}"
-					    puts " "
-				    else sell_ratio < 1
-				    	sold = (total_harvest * sell_ratio).to_i
-				    	income = (sold * set_price).round(2)
-	 				    money += income
-	 				    total_harvest -= sold
-	 				    puts " "
-	 				    puts "You sold #{sold} coconuts to #{(sell_ratio*100).round(2)}% of beachgoers"
-				    	if sell_ratio > 1.5
-				    		puts "Your coconuts sold out in the first hour! You need to raise your price much higher."
-				    	elsif sell_ratio > 1.1 && sell_ratio <= 1.5
-					    	puts "Your coconuts sold out by the afternoon, try raising your price a bit higher."
-					    elsif sell_ratio > 0.9 && sell_ratio <= 1.1
-					    	puts "Considering the weather, you priced your coconuts extremely well!"
-					    elsif sell_ratio > 0.6 && sell_ratio <= 0.9
-					    	puts "Your coconuts didn't sell out, try lowering your price a bit to sell more."
-					    elsif sell_ratio > 0.4 && sell_ratio <= 0.6
-					    	puts "You only sold about half of your coconuts, try lowering your price more."
-					    else
-					    	puts "You hardly sold any coconuts, you should probably lower your price much more."
-					    end
-					    puts "You banked $#{income} today for a total of $#{money}"
-					    puts " "
-	 				end
+#Method to clear screen **********************
+def clear_screen
+  sleep(3)
+  system "clear"
+end
 
-			    elsif curr_temp > 75 && curr_temp <= 85
-			    	temp_mult = 1.35
-			    	demand_mult = temp_mult * weather_mult
-	    			demand_price = demand_mult * avg_price
-    				sell_ratio = (demand_price / set_price).round(2) #if the demand price is higher than set price, sell all. if lower, sell less
-				     if sell_ratio > 1
-				    	sold = total_harvest
-				    	income = (sold * set_price).round(2)
-				    	money += income
-				    	total_harvest = 0
-				    	puts " "
-				    	puts "You sold #{sold} coconuts to 100% of beachgoers"
-				    	if sell_ratio > 1.5
-				    		puts "Your coconuts sold out in the first hour! You need to raise your price much higher."
-				    	elsif sell_ratio > 1.1 && sell_ratio <= 1.5
-					    	puts "Your coconuts sold out by the afternoon, try raising your price a bit higher."
-					    elsif sell_ratio > 0.9 && sell_ratio <= 1.1
-					    	puts "Considering the weather, you priced your coconuts extremely well!"
-					    elsif sell_ratio > 0.6 && sell_ratio <= 0.9
-					    	puts "Your coconuts didn't sell out, try lowering your price a bit to sell more."
-					    elsif sell_ratio > 0.4 && sell_ratio <= 0.6
-					    	puts "You only sold about half of your coconuts, try lowering your price more."
-					    else
-					    	puts "You hardly sold any coconuts, you should probably lower your price much more."
-					    end
-					    puts "You banked $#{income} today for a total of $#{money}"
-					    puts " "
-				    else sell_ratio < 1
-				    	sold = (total_harvest * sell_ratio).to_i
-				    	income = (sold * set_price).round(2)
-	 				    money += income
-	 				    total_harvest -= sold
-	 				    puts " "
-	 				    puts "You sold #{sold} coconuts to #{(sell_ratio*100).round(2)}% of beachgoers"
-				    	if sell_ratio > 1.5
-				    		puts "Your coconuts sold out in the first hour! You need to raise your price much higher."
-				    	elsif sell_ratio > 1.1 && sell_ratio <= 1.5
-					    	puts "Your coconuts sold out by the afternoon, try raising your price a bit higher."
-					    elsif sell_ratio > 0.9 && sell_ratio <= 1.1
-					    	puts "Considering the weather, you priced your coconuts extremely well!"
-					    elsif sell_ratio > 0.6 && sell_ratio <= 0.9
-					    	puts "Your coconuts didn't sell out, try lowering your price a bit to sell more."
-					    elsif sell_ratio > 0.4 && sell_ratio <= 0.6
-					    	puts "You only sold about half of your coconuts, try lowering your price more."
-					    else
-					    	puts "You hardly sold any coconuts, you should probably lower your price much more."
-					    end
-					    puts "You banked $#{income} today for a total of $#{money}"
-					    puts " "
-	 				end
+# Method for intro to the game **********************
+def intro
+  clear_screen
+  print "Today is "
+  puts Time.now
+  sleep(2)
+  puts"\nYou are travelling by motorcycle on a dirt road in Thailand, when all of a sudden you swerve and hit a ditch. Knocking yourself unconcious...\n\n"
+  sleep (5)
+end
 
-			    elsif curr_temp > 85 && curr_temp <= 95
-			    	temp_mult = 1.8
-			    	demand_mult = temp_mult * weather_mult
-	    			demand_price = demand_mult * avg_price
-    				sell_ratio = (demand_price / set_price).round(2) #if the demand price is higher than set price, sell all. if lower, sell less
-				     if sell_ratio > 1
-				    	sold = total_harvest
-				    	income = (sold * set_price).round(2)
-				    	money += income
-				    	total_harvest = 0
-				    	puts " "
-				    	puts "You sold #{sold} coconuts to 100% of beachgoers"
-				    	if sell_ratio > 1.5
-				    		puts "Your coconuts sold out in the first hour! You need to raise your price much higher."
-				    	elsif sell_ratio > 1.1 && sell_ratio <= 1.5
-					    	puts "Your coconuts sold out by the afternoon, try raising your price a bit higher."
-					    elsif sell_ratio > 0.9 && sell_ratio <= 1.1
-					    	puts "Considering the weather, you priced your coconuts extremely well!"
-					    elsif sell_ratio > 0.6 && sell_ratio <= 0.9
-					    	puts "Your coconuts didn't sell out, try lowering your price a bit to sell more."
-					    elsif sell_ratio > 0.4 && sell_ratio <= 0.6
-					    	puts "You only sold about half of your coconuts, try lowering your price more."
-					    else
-					    	puts "You hardly sold any coconuts, you should probably lower your price much more."
-					    end
-					    puts "You banked $#{income} today for a total of $#{money}"
-					    puts " "
-				    else sell_ratio < 1
-				    	sold = (total_harvest * sell_ratio).to_i
-				    	income = (sold * set_price).round(2)
-	 				    money += income
-	 				    total_harvest -= sold
-	 				    puts " "
-	 				    puts "You sold #{sold} coconuts to #{(sell_ratio*100).round(2)}% of beachgoers"
-				    	if sell_ratio > 1.5
-				    		puts "Your coconuts sold out in the first hour! You need to raise your price much higher."
-				    	elsif sell_ratio > 1.1 && sell_ratio <= 1.5
-					    	puts "Your coconuts sold out by the afternoon, try raising your price a bit higher."
-					    elsif sell_ratio > 0.9 && sell_ratio <= 1.1
-					    	puts "Considering the weather, you priced your coconuts extremely well!"
-					    elsif sell_ratio > 0.6 && sell_ratio <= 0.9
-					    	puts "Your coconuts didn't sell out, try lowering your price a bit to sell more."
-					    elsif sell_ratio > 0.4 && sell_ratio <= 0.6
-					    	puts "You only sold about half of your coconuts, try lowering your price more."
-					    else
-					    	puts "You hardly sold any coconuts, you should probably lower your price much more."
-					    end
-					    puts "You banked $#{income} today for a total of $#{money}"
-					    puts " "
-	 				end
+# Method for about menu option **********************
+def about
+  puts "Created by: Frank Rycak Jr." + " " + "\u00A9" + " " + "2016" + " " + "Wyncode Cohort 8"
+  sleep(3)
+end
 
-			    else
-			    	temp_mult = 2.5
-			    	demand_mult = temp_mult * weather_mult
-	    			demand_price = demand_mult * avg_price
-    				sell_ratio = (demand_price / set_price).round(2) #if the demand price is higher than set price, sell all. if lower, sell less
-				     if sell_ratio > 1
-				    	sold = total_harvest
-				    	income = (sold * set_price).round(2)
-				    	money += income
-				    	total_harvest = 0
-				    	puts " "
-				    	puts "You sold #{sold} coconuts to 100% of beachgoers"
-				    	if sell_ratio > 1.5
-				    		puts "Your coconuts sold out in the first hour! You need to raise your price much higher."
-				    	elsif sell_ratio > 1.1 && sell_ratio <= 1.5
-					    	puts "Your coconuts sold out by the afternoon, try raising your price a bit higher."
-					    elsif sell_ratio > 0.9 && sell_ratio <= 1.1
-					    	puts "Considering the weather, you priced your coconuts extremely well!"
-					    elsif sell_ratio > 0.6 && sell_ratio <= 0.9
-					    	puts "Your coconuts didn't sell out, try lowering your price a bit to sell more."
-					    elsif sell_ratio > 0.4 && sell_ratio <= 0.6
-					    	puts "You only sold about half of your coconuts, try lowering your price more."
-					    else
-					    	puts "You hardly sold any coconuts, you should probably lower your price much more."
-					    end
-					    puts "You banked $#{income} today for a total of $#{money}"
-					    puts " "
-				    else sell_ratio < 1
-				    	sold = (total_harvest * sell_ratio).to_i
-				    	income = (sold * set_price).round(2)
-	 				    money += income
-	 				    total_harvest -= sold
-	 				    puts " "
-	 				    puts "You sold #{sold} coconuts to #{(sell_ratio*100).round(2)}% of beachgoers"
-				    	if sell_ratio > 1.5
-				    		puts "Your coconuts sold out in the first hour! You need to raise your price much higher."
-				    	elsif sell_ratio > 1.1 && sell_ratio <= 1.5
-					    	puts "Your coconuts sold out by the afternoon, try raising your price a bit higher."
-					    elsif sell_ratio > 0.9 && sell_ratio <= 1.1
-					    	puts "Considering the weather, you priced your coconuts extremely well!"
-					    elsif sell_ratio > 0.6 && sell_ratio <= 0.9
-					    	puts "Your coconuts didn't sell out, try lowering your price a bit to sell more."
-					    elsif sell_ratio > 0.4 && sell_ratio <= 0.6
-					    	puts "You only sold about half of your coconuts, try lowering your price more."
-					    else
-					    	puts "You hardly sold any coconuts, you should probably lower your price much more."
-					    end
-					    puts "You banked $#{income} today for a total of $#{money}"
-					    puts " "
+# Method to exit the game **********************
+def close
+  puts "Goodbye comeback soon!"
+  exit
+end
 
-	 				end
-	 			end
-	 		else
-	 			puts "You don't have any coconuts to sell!"
-	 			puts " "
-		    end
-		when "buy"
-			if money > 0
-				puts " "
-			    puts "-- Upgrade your harvesting tools, employ other homeless people, or buy wholesale coconuts from other sellers?"
-			    puts "What would you like to buy: UPGRADE, EMPLOY, or WHOLESALE?"
-			    puts " "
-			    buy_option = gets.chomp.downcase
-			    case buy_option
-			    when "upgrade"
-			    	puts " "
-			    	puts "You have $#{money}. What kind of upgrades are you interested in?"
-			    	puts " "
-			    	puts "- $950 - Titanium alloy professional harvesting stick - +100 coconuts/hour"
-			    	puts "- $7,500 - Golf cart with large bin attached - +250 coconuts/hour"
-			    	puts "- 32,800 - 2016 minivan with flame decals - +700 coconuts/hour"
-					puts "- 144,000 - Industrial coconut harvesting machine - +2,000 coconuts/hour"
-					puts " "
-					puts "Please choose: STICK, CART, MINIVAN, or MACHINE?"
-					puts " "
-					upgrade = gets.chomp.downcase
-					case upgrade #CHANGE to not be able to buy with less than cost amount / or buy two at a time.
-					when "stick"
-						tool = "poking at trees with your titanium alloy apparatus."
-						harvest_rate += 100
-						money -= 950
-						day += 1
-						puts "Good purchase.. this will be way easier than climbing!"
-						puts " "
-					when "cart"
-						tool = "golf carting around and throwing coconuts in your bin"
-						harvest_rate += 250
-						money -= 7500
-						day += 1
-						puts "Nice! golf carts are way more fun to drive off the golf course."
-						puts " "
-					when "minivan"
-						tool = "riding in the minivan, windows down, wind in your hair"
-						harvest_rate += 700
-						money -= 32800
-						day += 1
-						puts "aww yeah.. the flames make you harvest faster!"
-						puts " "
-					when "machine"
-						tool = "harvesting like crazy.. this industrial machine is a beast!"
-						harvest_rate += 2000
-						money -= 144000
-						day += 1
-						puts "BOOM! Is this thing even street legal?"
-						puts " "
-					else
-						"Sorry, that's not an option."
-						puts " "
-					end
-				when "employ"
-					puts " "
-					puts "-- Good on you for wanting to help keep the economy going!"
-					puts "-- Each employee will cost $#{employee_daily_cost} EVERY harvesting day (minimum wage + benefits!)"
-					puts "-- and harvest at rate of #{employee_harvest_rate} coconuts/hour."
-					puts "-- You can afford to hire #{(money/employee_daily_cost).to_i} employees (beware of recurring costs!)"
-					puts " "
-					puts "How many homeless people would you like to hire?"
-					puts " "
-					buy_employees = gets.chomp.to_i
-					if (buy_employees * employee_daily_cost) < money
-						employees += buy_employees
-						money -= (buy_employees * employee_daily_cost)
-						puts " "
-						puts "You just hired #{buy_employees} employees!"
-						puts "Employee harvest rate: #{employees * employee_harvest_rate}; Num. of employees: #{employees}."
-						puts " "
-						day += 1
-					else (buy_employees * employee_daily_cost) > money
-						puts " "
-						puts "You don't have enough money to hire employees!"
-						puts " "
-					end
-				when "wholesale"
-					puts " "
-					puts "-- Today looks like a pretty decent day to buy out others' inventory"
-					if curr_temp < 65
-						temp_mult = 0.75
-						demand_mult = temp_mult * weather_mult
-						market_rate = (avg_wholesale_price * demand_mult).round(2)
-						puts "-- Based on today's weather, the market rate for wholesale coconuts is $#{market_rate}"
-						puts "-- You can afford #{(money/market_rate).to_i} coconuts."
-						puts " "
-						puts "How many coconuts are you looking to buy?"
-						puts " "
-						buy_coconuts = gets.chomp.to_i
-						buy_coconut_cost = (buy_coconuts * market_rate).round(2)
-						if buy_coconut_cost < money
-							money -= buy_coconut_cost
-							total_harvest += buy_coconuts
-							day += 1
-						else
-							puts " "
-							puts "You don't have enough money for that many!"
-							puts " "
-						end
-					elsif curr_temp > 65 && curr_temp <= 75
-						temp_mult = 1.0
-						demand_mult = temp_mult * weather_mult
-						demand_mult = temp_mult * weather_mult
-						market_rate = (avg_wholesale_price * demand_mult).round(2)
-						puts "-- Based on today's weather, the market rate for wholesale coconuts is #{market_rate}"
-						puts "-- You can afford #{(money/market_rate).to_i} coconuts."
-						puts " "
-						puts "How many coconuts are you looking to buy?"
-						puts " "
-						buy_coconuts = gets.chomp.to_i
-						buy_coconut_cost = (buy_coconuts * market_rate).round(2)
-						if buy_coconut_cost < money
-							money -= buy_coconut_cost
-							total_harvest += buy_coconuts
-							day += 1
-						else
-							puts "You don't have enough money for that many!"
-							puts " "
-						end
-					elsif curr_temp > 75 && curr_temp <= 85
-						temp_mult = 1.35
-						demand_mult = temp_mult * weather_mult
-						demand_mult = temp_mult * weather_mult
-						market_rate = (avg_wholesale_price * demand_mult).round(2)
-						puts "-- Based on today's weather, the market rate for wholesale coconuts is #{market_rate}"
-						puts "-- You can afford #{(money/market_rate).to_i} coconuts."
-						puts " "
-						puts "How many coconuts are you looking to buy?"
-						puts " "
-						buy_coconuts = gets.chomp.to_i
-						buy_coconut_cost = (buy_coconuts * market_rate).round(2)
-						if buy_coconut_cost < money
-							money -= buy_coconut_cost
-							total_harvest += buy_coconuts
-							day += 1
-						else
-							puts " "
-							puts "You don't have enough money for that many!"
-							puts " "
-						end
-					elsif curr_temp > 85 && curr_temp <= 95
-						temp_mult = 1.8
-						demand_mult = temp_mult * weather_mult
-						demand_mult = temp_mult * weather_mult
-						market_rate = (avg_wholesale_price * demand_mult).round(2)
-						puts "-- Based on today's weather, the market rate for wholesale coconuts is #{market_rate}"
-						puts "-- You can afford #{(money/market_rate).to_i} coconuts."
-						puts " "
-						puts "How many coconuts are you looking to buy?"
-						puts " "
-						buy_coconuts = gets.chomp.to_i
-						buy_coconut_cost = (buy_coconuts * market_rate).round(2)
-						if buy_coconut_cost < money
-							money -= buy_coconut_cost
-							total_harvest += buy_coconuts
-							day += 1
-						else
-							puts " "
-							puts "You don't have enough money for that many!"
-							puts " "
-						end
-					else
-						temp_mult = 2.5
-						demand_mult = temp_mult * weather_mult
-						demand_mult = temp_mult * weather_mult
-						market_rate = (avg_wholesale_price * demand_mult).round(2)
-						puts "-- Based on today's weather, the market rate for wholesale coconuts is #{market_rate}"
-						puts "-- You can afford #{(money/market_rate).to_i} coconuts."
-						puts " "
-						puts "How many coconuts are you looking to buy?"
-						puts " "
-						buy_coconuts = gets.chomp.to_i
-						buy_coconut_cost = (buy_coconuts * market_rate).round(2)
-						if buy_coconut_cost < money
-							money -= buy_coconut_cost
-							total_harvest += buy_coconuts
-							day += 1
-						else
-							puts " "
-							puts "You don't have enough money for that many!"
-							puts " "
-						end
-					end
-				end
-			else
-				puts " "
-				puts "You don't have any money to buy - go out and make some!"
-				puts " "
-			end
+# Method to choose weapon **********************
+def select_weapon
+	# Store weapons in new array
+	weapons = [
+    "\u{1F52B}" + "   " + "gun",
+     "\u{1F526}" + "   " + "flashlight",
+      "\u{1F525}" + "   " + "torch",
+       "\u{1F528}" + "   " + "hammer",
+        "\u{1F52A}" + "   " + "knife"]
 
-		else
-			puts " "
-		    puts "Sorry, that's not an option."
-		    puts " "
-		end
+# Ask user to choose a starting weapon
+	puts "Choose your weapon by typing its associated number: \n\n"
+
+# Loop through weapons array and print options to console
+# prints the weapons and its value
+	(0...weapons.length).each do |i|
+		puts "#{i+1} - #{weapons[i]}"
+	end
+
+# user input placeholder
+	print "> "
+
+# getting the users choice
+	choice = $stdin.gets.chomp.to_i - 1
+	@selected_weapon = weapons[choice]
+
+#switch case for output of weapon choice
+  case choice
+  when 0
+    puts "You selected: #{@selected_weapon}"
+    clear_screen
+    start_game
+  when 1
+    puts "You selected: #{@selected_weapon}"
+    clear_screen
+    start_game
+  when 2
+    puts "You selected: #{@selected_weapon}"
+    clear_screen
+    start_game
+  when 3
+    puts "You selected: #{@selected_weapon}"
+    clear_screen
+    start_game
+  when 4
+    puts "You selected: #{@selected_weapon}"
+    clear_screen
+    start_game
+  else
+    puts "\nChoose again\n\n"
+    select_weapon
+  end
+end
+
+# Method to change weapon **********************
+def change_weapon
+	# Store weapons in new array
+	weapons = [
+    "\u{1F52B}" + "   " + "gun",
+     "\u{1F526}" + "   " + "flashlight",
+      "\u{1F525}" + "   " + "torch",
+       "\u{1F528}" + "   " + "hammer",
+        "\u{1F52A}" + "   " + "knife"]
+
+# Ask user to choose a starting weapon
+	puts "Choose your weapon by typing its associated number: \n\n"
+
+# Loop through weapons array and print options to console
+# prints the weapons and its value
+	(0...weapons.length).each do |i|
+		puts "#{i+1} - #{weapons[i]}"
+	end
+
+# user input placeholder
+	print "> "
+
+# getting the users choice
+	choice = $stdin.gets.chomp.to_i - 1
+	@selected_weapon = weapons[choice]
+
+#switch case for output of weapon choice
+  case choice
+  when 0
+    puts "You selected: #{@selected_weapon}"
+    walking_down_the_path
+  when 1
+    puts "You selected: #{@selected_weapon}"
+    walking_down_the_path
+  when 2
+    puts "You selected: #{@selected_weapon}"
+    walking_down_the_path
+  when 3
+    puts "You selected: #{@selected_weapon}"
+    walking_down_the_path
+  when 4
+    puts "You selected: #{@selected_weapon}"
+    walking_down_the_path
+  else
+    puts "\nChoose again\n\n"
+    select_weapon
+  end
+end
+
+# Method to start game **********************
+def start_game
+# Assign initial value for items_collected array
+	$items_collected = []
+
+# Ask player if they are ready to play
+	puts "\nReady to play? Y/N"
+	print "> "
+
+# confirmation of players intention to play
+	confirm = $stdin.gets.chomp.upcase
+	if confirm == 'Y'
+    clear_screen
+		enter_room
 	else
-		puts " "
-		puts %Q{
-							Congrats, you're a
-   .$$.  .$$ .$$. .$$   .$$   .$$  .$$$$$  .$$  .$$   .$$.   .$$ .$$$$$$ .$$$$$
-   .$$$..$S$ .$$  .$$   .$$   .$$ .$$   $$ .$$$ .$$  .$$$$   .$$ .$$ .$$ .$$...
-   .$.$$$.$$ .$$  .$$   .$$   .$$ .$$   $$ .$$$ $$$  .$$ $$  .$$ .$$:$$  .$$$$$
-   .$ .$ .$$ .$$  .$$   .$$.. .$$  $$.  $$ .$$.$$$$ .$$$$$$$ .$$ .$$ \\$\\ .$$...
-   .$    .$$ .$$  .$$$$$.$$$$$.$$   .$$$/  .$$ .$$$.$$$  .$$$.$$ .$$. \\$\\.$$$$$
-
-		}
-		puts "It only took you #{day} days to make $#{(money).round(2)}!"
-		puts " "
-		puts "You've made a coconut empire, #{name.capitalize}! - a true rags to riches tale."
-		puts " "
-		puts "You're coconut empire included #{employees} employees. Woah!"
-		puts " "
-		selling = false
+		puts "Game over"
 	end
 end
+
+# Method to enter room **********************
+def enter_room
+  time = Time.now
+  time_future = time + 100*60*60
+# Inform user of current status
+	puts "\nYou awake in a small room."
+  print "...the date is  "
+  puts time_future
+  puts "\nFours days after your accident!\n\n"
+	puts "There is a large door in the distance that is locked."
+	puts "In front of you is a small table.\n\n"
+	puts "You walk towards the table.\n\n"
+	desk_options
+end
+
+# Method for first item found at desk **********************
+def desk_options
+#items that can be found in the desk
+  desk_items = [
+    "\u{1F511}" + "   " + "key",
+     "\u{270F}" + "   " + "pencil",
+      "\u{1F4B5}" + "   " + "money",
+       "\u{1F354}" + "   " + "hamburger",]
+
+# Ask user to pick an item
+	puts "Choose and item to take with you: "
+
+# Loop through desk items array and print options to console
+# prints the desk items and its value
+  (0...desk_items.length).each do |i|
+		puts "#{i+1} - #{desk_items[i]}"
+	end
+
+# user input placeholder
+	print "> "
+
+# getting the users choice
+	choice = $stdin.gets.chomp.to_i - 1
+	@selected_from_desk = desk_items[choice]
+
+# if-statement to determine which item they chose and then adding it to the items_collected array
+	if choice == 0
+		puts "\nThe #{@selected_from_desk} has been added to your bag"
+    $items_collected << "key"
+    clear_screen
+		puts "\nYou found a letter on the desk. It says 'Find your way to the castle and bring me my things!'"
+    sleep(5)
+    options_when_walking_away_from_desk
+	elsif choice == 1
+		puts "\nThe #{@selected_from_desk} has been added to your bag"
+    $items_collected << "pencil"
+    clear_screen
+		puts "\nYou found a letter on the desk. It says 'Find your way to the castle and bring me my things!'"
+    sleep(5)
+    options_when_walking_away_from_desk
+	elsif choice == 2
+		puts "\nThe #{@selected_from_desk} has been added to your bag"
+    $items_collected << "money"
+    clear_screen
+		puts "\nYou found a letter on the desk. It says 'Find your way to the castle and bring me my things!'"
+    sleep(5)
+    options_when_walking_away_from_desk
+	elsif choice == 3
+		puts "\nThe #{@selected_from_desk} has been added to your bag"
+    $items_collected << "hamburger"
+    clear_screen
+		puts "\nYou found a letter on the desk. It says 'Find your way to the castle and bring me my things!'"
+    sleep(5)
+    options_when_walking_away_from_desk
+  else
+    puts "\n***Please choose an item that is available!***\n\n"
+    desk_options
+# printing out users selection
+  puts "\nYou selected: #{@selected_from_desk}"
+  end
+end
+
+# method for options when after picking item from desk **********************
+def options_when_walking_away_from_desk
+# letting user know whats happening with the door
+  puts "\nYou walk to the door and... "
+  sleep(2)
+  if $items_collected.include?("key") then
+    puts "You use the key to open the door"
+    sleep(2)
+    opened_the_door_walked_outside
+  else !$items_collected.include?("key")
+    puts "Sorry you dont have the key, go back to the desk!\n\n"
+    sleep(2)
+    remove_last_item_from_items_collected_at_desk
+  end
+end
+
+#method to remove last item from array when being returned to previous task which is desk_options **********************
+def remove_last_item_from_items_collected_at_desk
+  $items_collected.delete($items_collected.last)
+# returns user to previous task of choosing item from desk
+  desk_options
+end
+
+#Method for your options when you have opened the door **********************
+def opened_the_door_walked_outside
+# array for choices once you have made it outside
+  where_to_go = ["path", "forest"]
+  puts "\nWhere would you like to go:"
+  puts "Path or Forest?"
+# user input placeholder
+  print "> "
+
+# getting user input for either forest or path
+  confirm = $stdin.gets.chomp.upcase
+	if confirm == "P" or confirm == "PATH"
+		walking_down_the_path
+    clear_screen
+    sleep(3)
+	elsif confirm == "F" or confirm == "FOREST"
+		walking_down_into_the_forest
+    clear_screen
+    sleep(3)
+  else
+    puts "Choose again..."
+    opened_the_door_walked_outside
+	end
+end
+
+# Method for walking to the path **********************
+def walking_down_the_path
+  sleep(2)
+  clear_screen
+  puts "As you walk down the path it becomes harder to see, its getting dark."
+  if @selected_weapon.include?("flashlight") or @selected_weapon.include?("torch") then
+    puts "Luckily you have a #{@selected_weapon} to help light the path."
+    walking_out_of_the_path
+  else
+    puts "\nOh No! you dont have the right tools to continue in the dark!"
+    puts "\nWould you like to go back and pick another tool?"
+    puts "Yes or No?"
+    print "> "
+  end
+
+# confirmation to change weapon
+    confirm = $stdin.gets.chomp.upcase
+    if confirm == 'Y' or confirm == 'YES'
+      puts "You walk back to the cabin..."
+      clear_screen
+    	change_weapon
+    else
+    	game_over
+      restart_game
+    end
+end
+
+#Method for walking thru of the path **********************
+def walking_out_of_the_path
+  path_items = ["ruby", "laptop"]
+  sleep(3)
+  puts "\nWith the use of your #{@selected_weapon} you see something in the distance"
+  sleep(3)
+  puts "\nIts a ruby and a laptop! Would you like to take one with you?"
+  puts "Yes or No?"
+  print "> "
+
+  confirm = $stdin.gets.chomp.upcase
+  if confirm == 'Y' or confirm == 'YES'
+    sleep(2)
+    puts "Which would you like to add to your bag?"
+    puts "Ruby or the Laptop?"
+    puts "Select number: "
+#Loop through path items array and print options to console
+# prints the path items and its value
+      (0...path_items.length).each do |i|
+    		puts "#{i+1} - #{path_items[i]}"
+    	end
+
+# user input placeholder
+    	print "> "
+
+# getting the users choice
+    	choice = $stdin.gets.chomp.to_i - 1
+    	@selected_path_item = path_items[choice]
+
+      if choice == 0 then
+        puts "You have added the #{@selected_path_item} to the bag"
+      $items_collected << @selected_path_item
+      puts "Now you make your way to the end of the path"
+      sleep(4)
+      enter_castle
+    elsif choice == 1
+      puts "You have added the #{@selected_path_item} to the bag"
+    $items_collected << @selected_path_item
+      puts "Now you make your way to the end of the path"
+      sleep(4)
+    enter_castle
+    else
+        puts "Choose 1 or 2"
+        walking_out_of_the_path
+      end
+  else
+    puts "You took nothing and continued out of the path."
+    enter_castle
+  end
+
+end
+
+# Method for walking thru the forest **********************
+def walking_down_into_the_forest
+  clear_screen
+  puts "As you walk into the forest you hear a noise up ahead.\n\n"
+  sleep(2)
+  puts "There is a Giant Troll rushing towards you...\n\n"
+  sleep(2)
+   if @selected_weapon.include?("gun") or @selected_weapon.include?("knife") then
+    puts "Luckily you have a #{@selected_weapon} and you defeated the Giant Troll!\n\n"
+    walking_out_of_the_forest
+  else
+    puts "Oh No! you dont have the right tools to fight The Giant Troll!\n\n"
+    puts "He rushes you and crushes your skull\n\n"
+    game_over
+  end
+end
+
+# Method for walking out of the forest **********************
+def walking_out_of_the_forest
+  clear_screen
+  trolls_head = "Trolls Head"
+  puts "Now that you used your #{@selected_weapon} to defeat the Giant Troll,"
+  puts "Would you like to take his head as a suvorneir?\n\n"
+  puts "Yes or No?"
+  print "> "
+
+    confirm = $stdin.gets.chomp.upcase
+    if confirm == "Y" or confirm == "YES"
+      puts "You added the #{trolls_head} to your bag.\n\n"
+      $items_collected << "trolls_head"
+      enter_castle
+    else
+      puts "You took nothing and continued out of the path."
+      enter_castle
+    end
+end
+
+# Method for entering the castle **********************
+def enter_castle
+  clear_screen
+  sleep(5)
+  castle_choices = ["door", "staircase"]
+  puts "You made it to the castle!"
+  puts "\nAs you walk in you notice there is a door ahead and a staircase."
+  puts "\nWould you like to open the door, or walk up the staircase"
+  puts "Type 'door' or 'stairs':"
+  print"> "
+
+  confirm = $stdin.gets.chomp.upcase
+  clear_screen
+	if confirm == 'DOOR' or confirm == 'D'
+    puts "The door is locked and you dont have another key."
+		wrong_choice_castle
+	elsif confirm == 'STAIRS' or confirm == 'S'
+		puts "You have made it to the castle! The Knight asks if you brought his things."
+    user_items
+  else
+    puts "Choose again..."
+    wrong_choice_castle
+	end
+end
+
+# Method for when choosing the wrong option **********************
+def wrong_choice_castle
+  castle_choices = ["door", "staircase"]
+  puts "\nTry something else!"
+  sleep(2)
+  puts "\nWould you like to open the door, or walk up the staircase"
+  puts "Type 'door' or 'stairs':"
+  print"> "
+
+  confirm = $stdin.gets.chomp.upcase
+  clear_screen
+	if confirm == 'DOOR' or confirm == 'D'
+    puts "The door is locked and you dont have another key."
+		wrong_choice_castle
+	elsif confirm == 'STAIRS' or confirm == 'S'
+    sleep(3)
+		puts "You found the person who wrote the note! They ask you if you brought their things."
+    user_items
+  else
+    puts "Choose again..."
+    wrong_choice_castle
+	end
+end
+
+#Method to determine if the items_collected are equal to the correct items **********************
+def user_items
+  puts "\nLets see if you collected the correct items: "
+#sleep arguement to build suspense
+  puts "Confirming please wait..."
+  sleep(4)
+  puts "........................."
+  sleep(3)
+  puts "...........in progress"
+  sleep(2)
+  puts "......complete"
+  sleep(2)
+
+# verification that the items_collected equal valid_items
+  if $items_collected == ["key", "ruby"] or $items_collected == ["key", "trolls_head"]
+    puts "\nYou have the correct combination!\n\n"
+    winner
+  else
+    puts "\nYou have the wrong combination\n\n"
+    game_over
+  end
+end
+
+# Method for declaring a winner **********************
+def winner
+    puts "██╗    ██╗██╗███╗   ██╗███╗   ██╗███████╗██████╗ "
+    sleep(1)
+    puts "██║    ██║██║████╗  ██║████╗  ██║██╔════╝██╔══██╗"
+         sleep(1)
+    puts "██║ █╗ ██║██║██╔██╗ ██║██╔██╗ ██║█████╗  ██████╔╝"
+         sleep(1)
+    puts "██║███╗██║██║██║╚██╗██║██║╚██╗██║██╔══╝  ██╔══██╗"
+         sleep(1)
+    puts "╚███╔███╔╝██║██║ ╚████║██║ ╚████║███████╗██║  ██║"
+         sleep(1)
+    puts " ╚══╝╚══╝ ╚═╝╚═╝  ╚═══╝╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝"
+         sleep(1)
+    puts "                                                 "
+         sleep(1)
+    restart_game
+end
+
+# Method for declaring a loser **********************
+def game_over
+    puts "  ██████╗  █████╗ ███╗   ███╗███████╗"
+    sleep(1)
+    puts "██╔════╝ ██╔══██╗████╗ ████║██╔════╝"
+    sleep(1)
+    puts "██║  ███╗███████║██╔████╔██║█████╗  "
+    sleep(1)
+    puts "██║   ██║██╔══██║██║╚██╔╝██║██╔══╝  "
+    sleep(1)
+    puts "╚██████╔╝██║  ██║██║ ╚═╝ ██║███████╗"
+    sleep(1)
+    puts "╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝"
+    sleep(1)
+    puts "                                 "
+    sleep(1)
+    puts "██████╗ ██╗   ██╗███████╗██████╗   "
+    sleep(1)
+    puts "██╔═══██╗██║   ██║██╔════╝██╔══██╗  "
+    sleep(1)
+    puts "██║   ██║██║   ██║█████╗  ██████╔╝  "
+    sleep(1)
+    puts "██║   ██║╚██╗ ██╔╝██╔══╝  ██╔══██╗  "
+    sleep(1)
+    puts "╚██████╔╝ ╚████╔╝ ███████╗██║  ██║  "
+    sleep(1)
+    puts "╚═════╝   ╚═══╝  ╚══════╝╚═╝  ╚═╝  "
+    sleep(1)
+
+
+    exit(0)
+end
+
+# Method to restart_game **********************
+def restart_game
+  puts "Would you like to play again?"
+  puts "Yes or No?"
+  print "> "
+
+# getting the users choice
+	choice = $stdin.gets.chomp.upcase
+
+# determine users choice
+  if choice == 'Y' or choice == 'YES' then
+    select_weapon
+  elsif choice == 'N' or choice == 'NO'
+    game_over
+  else
+    puts "Choose Yes or No\n\n"
+    restart_game
+end
+end
+start
