@@ -1,17 +1,8 @@
-function getGrade (s1, s2, s3) {
-  mean = (s1 + s2 + s3) / 3;
-  if (mean >= 90 && mean <= 100) {
-    return 'A';
-  } else if (mean >= 80 && mean < 90) {
-    return 'B';
-  } else if (mean >= 70 && mean < 80) {
-    return 'C';
-  } else if (mean >= 60 && mean < 70) {
-    return 'D';
-  } else {
-    return 'F';
-  }
-}
+var my_name = "danny";
 
+console.log("I am...");
+console.log(my_name.toUpperCase);
 
-console.log(getGrade(55,65,85));
+var journey = "We're going to October 21, 2015.. the FUTURE!!";
+var re = /FUTURE/ig;
+console.log(journey.replace(re, "PAST"));
