@@ -1,14 +1,13 @@
-pets = ["Scooby", "Duncan", "S"]
-cats = ["dkjf", "djdj", "ss"]
-
-def find_s(array)
-  array.each do |x|
-    if x.include? "S"
-      p x
+class MyClass
+    def to_s
+        "Hello to_s"
     end
-  end
-  return nil
+
+    def inspect
+        "Hello inspect"
+    end
 end
 
-puts find_s(pets)
-puts find_s(cats)
+my_instance = MyClass.new
+puts my_instance
+p my_instance
