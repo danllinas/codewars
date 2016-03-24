@@ -1,0 +1,9 @@
+<% background_color_array = [
+  ["light-blue", ],
+  ["#0066FF", ]
+] %>
+<% background_color_array[0].each_with_index do |elem, index| %>
+  .project .<%= elem %> {
+    background-color: <%= background_color_array[1][index] %>;
+  }
+<% end %>
